@@ -1,4 +1,4 @@
-package com.mmag.ud4_videoretrofitsimple
+package com.mmag.ud4_videoretrofitsimple.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,9 @@ import com.bumptech.glide.Glide
 import com.mmag.ud4_videoretrofitsimple.databinding.ItemCharacterBinding
 import com.mmag.ud4_videoretrofitsimple.network.model.Character
 
-class CharacterAdapter : ListAdapter<Character, CharacterAdapter.CharacterViewHolder>(CharacterItemCallBack) {
+class CharacterAdapter(
+    val navigateDetail: (id: Int) -> Unit
+) : ListAdapter<Character, CharacterAdapter.CharacterViewHolder>(CharacterItemCallBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,6 +26,10 @@ class CharacterAdapter : ListAdapter<Character, CharacterAdapter.CharacterViewHo
         Glide.with(holder.binding.root)
             .load(character.image)
             .into(holder.binding.ivCharacter)
+
+        holder.binding.root.setOnClickListener {
+            navigateDetail(character.id)
+        }
     }
 
     inner class CharacterViewHolder(val binding: ItemCharacterBinding) :

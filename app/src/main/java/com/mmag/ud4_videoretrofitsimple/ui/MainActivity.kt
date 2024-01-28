@@ -1,13 +1,14 @@
-package com.mmag.ud4_videoretrofitsimple
+package com.mmag.ud4_videoretrofitsimple.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mmag.ud4_videoretrofitsimple.databinding.ActivityMainBinding
 import com.mmag.ud4_videoretrofitsimple.network.APIManager
 import com.mmag.ud4_videoretrofitsimple.network.model.AllCharactersResponse
+import com.mmag.ud4_videoretrofitsimple.ui.CharacterAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,14 +18,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var _binding: ActivityMainBinding
     private val binding: ActivityMainBinding get() = _binding
 
-    private val  adapter = CharacterAdapter()
+    private val adapter = CharacterAdapter { id ->
+        navigateToDetail(id)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.rvCharacters.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
+        binding.rvCharacters.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvCharacters.adapter = adapter
 
         getCharactersFromAPI()
@@ -57,5 +61,12 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+
+    private fun navigateToDetail(id: Int) {
+        val intent = Intent(this, CharacterDetailActivity::class.java)
+        intent.putExtra("id", id)
+        startActivity(intent)
     }
 }
